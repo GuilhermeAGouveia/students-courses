@@ -90,7 +90,7 @@ public class StudentService {
 			studentRepository.deleteAll();
 		} else {
 			throw new ResponseStatusException(
-				HttpStatus.NOT_FOUND,
+				HttpStatus.BAD_REQUEST,
 				"To delete ALL students and students-courses relationships, inform confirm-deletion=true as a query param.");
 		}
 	}
