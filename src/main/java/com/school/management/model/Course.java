@@ -3,6 +3,8 @@ package com.school.management.model;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.sql.Time;
@@ -30,7 +32,7 @@ public class Course {
     )
     private Timestamp updatedAt;
 
-    @ManyToMany(mappedBy = "courses", cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+    @ManyToMany(mappedBy = "courses", cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
     private List<Student> students = new ArrayList<>();
 
     public Course() {}

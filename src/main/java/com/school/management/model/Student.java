@@ -3,6 +3,8 @@ package com.school.management.model;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
@@ -20,7 +22,7 @@ public class Student {
 	private String name;
 	private String address;
 
-	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
 	@JoinTable(name = "course_student",
 			joinColumns = @JoinColumn(name = "course_id"),
 			inverseJoinColumns = @JoinColumn(name = "student_id"))
