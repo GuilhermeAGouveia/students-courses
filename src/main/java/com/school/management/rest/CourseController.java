@@ -1,6 +1,5 @@
 package com.school.management.rest;
 
-import com.school.management.model.Course;
 import com.school.management.model.dto.CourseDto;
 import com.school.management.service.CourseService;
 import org.springframework.http.HttpStatus;

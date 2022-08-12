@@ -16,6 +16,7 @@ public class Student {
 	private Timestamp createdAt;
 	private Timestamp updatedAt;
 
+
 	public Student() {
 	}
 
