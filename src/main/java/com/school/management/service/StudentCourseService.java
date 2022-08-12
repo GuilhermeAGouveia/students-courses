@@ -72,4 +72,48 @@ public class StudentCourseService {
 
         return new StudentDto(student.getId(), student.getName(), student.getAddress(), student.getCourses(), student.getCreatedAt(), student.getUpdatedAt());
     }
+    public List<StudentDto> getStudentsFromCourse(Long id){
+        Course course = courseRepository.findById(id).orElseThrow(() -> new ResponseStatusException(
+                HttpStatus.NOT_FOUND, "Course not found."));
+
+        return course.getStudents().stream()
+                .map(student -> new StudentDto(student.getId(), student.getName(), student.getAddress(), student.getUpdatedAt(), student.getCreatedAt()))
+                .collect(Collectors.toList());
+    }
+    public List<CourseDto> getCoursesStudents() {
+        return courseRepository.findAll().stream()
+                .map(course -> new CourseDto(course.getId(), course.getName(), course.getStudents(), course.getCreatedAt(), course.getUpdatedAt()))
+                .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public CourseDto insertStudentInCourse(Long id, List<Long> studentsId) {
+        if (studentsId.size() > 50) {
+            throw new ResponseStatusException(
+                    HttpStatus.FORBIDDEN, "A course don't have more than 50 students");
+        }
+
+        Course course = courseRepository.findById(id).orElseThrow(() -> new ResponseStatusException(
+                HttpStatus.NOT_FOUND, "Course not found."));
+
+        List students = new ArrayList<Student>();
+        studentsId.stream().forEach(studentId -> {
+            Student student = studentRepository.findById(studentId).orElseThrow(() -> new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, String.format("Student with id %d not found.", studentId))
+            );
+            if (student.getCourses().size() > 5) {
+                throw new ResponseStatusException(
+                        HttpStatus.FORBIDDEN, String.format("A students %s have 5 courses.", student.getName()));
+            }
+            students.add(student);
+
+        });
+
+        course.setStudents(students);
+        course.setUpdatedAt(Timestamp.from(Instant.now()));
+        course = courseRepository.save(course);
+
+
+        return new CourseDto(course.getId(), course.getName(), course.getStudents(), course.getCreatedAt(), course.getUpdatedAt());
+    }
 }

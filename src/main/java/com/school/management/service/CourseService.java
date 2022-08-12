@@ -1,7 +1,9 @@
 package com.school.management.service;
 
 import com.school.management.model.Course;
+import com.school.management.model.Student;
 import com.school.management.model.dto.CourseDto;
+import com.school.management.model.dto.StudentDto;
 import com.school.management.repository.CourseRepository;
 import com.school.management.repository.StudentRepository;
 import org.springframework.http.HttpStatus;
@@ -76,6 +78,25 @@ public class CourseService {
                     "To delete students and students-courses relationships, inform confirm-deletion=true as a query param."
             );
         }
+    }
+
+    @Transactional
+    public CourseDto updateCourse(CourseDto courseDto) {
+        Course course = courseRepository.findById(courseDto.getId()).orElseThrow(() -> new ResponseStatusException(
+                HttpStatus.NOT_FOUND, "Course not found."));
+
+        Boolean updated = false;
+        if (courseDto.getName() != null && !courseDto.getName().isBlank() && !courseDto.getName().equals(course.getName())) {
+            course.setName(courseDto.getName());
+            updated = true;
+        }
+
+        if (updated) {
+            course.setUpdatedAt(Timestamp.from(Instant.now()));
+            course = courseRepository.save(course);
+        }
+
+        return new CourseDto(course.getId(), course.getName(), course.getCreatedAt(), course.getUpdatedAt());
     }
 
 
