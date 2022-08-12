@@ -12,6 +12,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -23,10 +24,20 @@ public class StudentService {
 		this.studentRepository = studentRepository;
 	}
 
-	public List<StudentDto> getStudents() {
-		return studentRepository.findAll().stream()
-			.map(student -> new StudentDto(student.getId(), student.getName(), student.getAddress(), student.getCreatedAt(), student.getUpdatedAt()))
+	public List<StudentDto> getStudents(Boolean withoutCourses) {
+
+		List<StudentDto> students = studentRepository.findAll()
+			.stream().map(student -> {
+				if (withoutCourses && !student.getCourses().isEmpty())
+					return null;
+				return new StudentDto(student.getId(), student.getName(), student.getAddress(), student.getCreatedAt(), student.getUpdatedAt());
+
+			})
 			.collect(Collectors.toList());
+
+		return students.stream().filter(Objects::nonNull).collect(Collectors.toList());
+
+
 	}
 
 	public StudentDto getStudent(Long id) {
@@ -105,7 +116,6 @@ public class StudentService {
 				HttpStatus.NOT_FOUND,
 				"To delete the student and student-courses relationships, inform confirm-deletion=true as a query param.");
 		}
-
-
 	}
+
 }
