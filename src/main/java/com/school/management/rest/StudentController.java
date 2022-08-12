@@ -1,6 +1,8 @@
 package com.school.management.rest;
 
+import com.school.management.model.dto.CourseDto;
 import com.school.management.model.dto.StudentDto;
+import com.school.management.service.StudentCourseService;
 import com.school.management.service.StudentService;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -16,9 +18,11 @@ import java.util.Optional;
 public class StudentController {
 
     private final StudentService studentService;
+    private final StudentCourseService studentCourseService;
 
-    public StudentController(StudentService studentService) {
+    public StudentController(StudentService studentService, StudentCourseService studentCourseService) {
         this.studentService = studentService;
+        this.studentCourseService = studentCourseService;
     }
 
     /**
@@ -34,10 +38,12 @@ public class StudentController {
      */
     @GetMapping(value = "/")
     @ResponseStatus(HttpStatus.OK)
-//	public List<StudentDto> getStudents(@RequestParam(name = "without-courses") Optional<Boolean> withoutCourses) {
-    public List<StudentDto> getStudents() {
-        return studentService.getStudents();
+	public List<StudentDto> getStudents(@RequestParam(name = "without-courses") Optional<Boolean> withoutCourses) {
+        return studentService.getStudents(withoutCourses.orElse(false));
     }
+//    public List<StudentDto> getStudents() {
+//        return studentService.getStudents();
+//    }
 
     /**
      * HTTP method: GET
@@ -126,34 +132,31 @@ public class StudentController {
     /**
      * HTTP method: GET
      * <p>
-     * TODO
      *
      * @param id = the student id.
      * @return list of courses the student is enrolled.
      */
     @GetMapping(value = "/{id}/courses")
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    public void getCoursesFromStudent(@PathVariable Long id) {
-        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "This endpoint must to be implemented.");
+    @ResponseStatus(HttpStatus.OK)
+    public List<CourseDto> getCoursesFromStudent(@PathVariable Long id) {
+        return studentCourseService.getCoursesFromStudent(id);
     }
 
     /**
      * HTTP method: GET
      * <p>
-     * TODO
      *
      * @return list of relationships between students and courses, ordered by student and course.
      */
     @GetMapping(value = "/courses")
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    public void getRelations() {
-        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "This endpoint must to be implemented.");
+    @ResponseStatus(HttpStatus.OK)
+    public List<StudentDto> getRelations() {
+        return studentCourseService.getStudentCourses();
     }
 
     /**
      * HTTP method: PUT
      * <p>
-     * TODO
      *
      * @param id        = the student id.
      * @param courseIds = the ids of the courses to enroll the student. Limited to 5 courses.
@@ -161,8 +164,8 @@ public class StudentController {
      * @return a list containing the student id and the enrolled courses.
      */
     @PutMapping(value = "/{id}/courses")
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    public void updateStudentCourses(@PathVariable Long id, @RequestBody List<Long> courseIds) {
-        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "This endpoint must to be implemented.");
+    @ResponseStatus(HttpStatus.OK)
+    public StudentDto updateStudentCourses(@PathVariable Long id, @RequestBody List<Long> courseIds) {
+        return studentCourseService.insertCourseInStudent(id, courseIds);
     }
 }

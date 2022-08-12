@@ -1,11 +1,17 @@
 package com.school.management.model;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
+@Setter
+@Getter
 @Entity
 public class Student {
 	@Id
@@ -13,6 +19,14 @@ public class Student {
 	private Long id;
 	private String name;
 	private String address;
+
+	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+	@JoinTable(name = "course_student",
+			joinColumns = @JoinColumn(name = "course_id"),
+			inverseJoinColumns = @JoinColumn(name = "student_id"))
+	private List<Course> courses = new ArrayList<>();
+
+
 	private Timestamp createdAt;
 	private Timestamp updatedAt;
 
@@ -24,6 +38,14 @@ public class Student {
 		this.id = id;
 	}
 
+	public Student(String name, String address, List <Course> courses, Timestamp createdAt, Timestamp updatedAt) {
+		this.name = name;
+		this.address = address;
+		this.createdAt = createdAt;
+		this.updatedAt = updatedAt;
+		this.courses = courses;
+	}
+
 	public Student(String name, String address, Timestamp createdAt, Timestamp updatedAt) {
 		this.name = name;
 		this.address = address;
@@ -31,48 +53,14 @@ public class Student {
 		this.updatedAt = updatedAt;
 	}
 
+	public Student(Long id, String name, String address, List <Course> courses, Timestamp createdAt, Timestamp updatedAt) {
+		this(name, address, courses, createdAt, updatedAt);
+		this.id = id;
+	}
+
 	public Student(Long id, String name, String address, Timestamp createdAt, Timestamp updatedAt) {
 		this(name, address, createdAt, updatedAt);
 		this.id = id;
 	}
 
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public String getAddress() {
-		return address;
-	}
-
-	public void setAddress(String address) {
-		this.address = address;
-	}
-
-	public Timestamp getCreatedAt() {
-		return createdAt;
-	}
-
-	public void setCreatedAt(Timestamp createdAt) {
-		this.createdAt = createdAt;
-	}
-
-	public Timestamp getUpdatedAt() {
-		return updatedAt;
-	}
-
-	public void setUpdatedAt(Timestamp updatedAt) {
-		this.updatedAt = updatedAt;
-	}
 }

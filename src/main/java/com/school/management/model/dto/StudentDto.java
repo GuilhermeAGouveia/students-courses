@@ -1,8 +1,16 @@
 package com.school.management.model.dto;
 
+import com.school.management.model.Course;
+import lombok.Getter;
+import lombok.Setter;
+
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.util.List;
+import java.util.stream.Collectors;
 
+@Getter
+@Setter
 public class StudentDto {
 
 	private Long id;
@@ -10,6 +18,8 @@ public class StudentDto {
 	private String name;
 
 	private String address;
+
+	private List<CourseDto> courses;
 
 	private Timestamp createdAt;
 
@@ -33,43 +43,15 @@ public class StudentDto {
 		this.updatedAt = updatedAt;
 	}
 
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
+	public StudentDto(Long id, String name, String address, List<Course> courses, Timestamp createdAt, Timestamp updatedAt) {
+		this(name, address);
 		this.id = id;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public String getAddress() {
-		return address;
-	}
-
-	public void setAddress(String address) {
-		this.address = address;
-	}
-
-	public Timestamp getCreatedAt() {
-		return createdAt;
-	}
-
-	public void setCreatedAt(Timestamp createdAt) {
+		this.courses = courses.stream()
+				.map(course ->
+						new CourseDto(course.getId(), course.getName(), course.getUpdatedAt(), course.getCreatedAt()))
+				.collect(Collectors.toList());
 		this.createdAt = createdAt;
-	}
-
-	public Timestamp getUpdatedAt() {
-		return updatedAt;
-	}
-
-	public void setUpdatedAt(Timestamp updatedAt) {
 		this.updatedAt = updatedAt;
 	}
+
 }

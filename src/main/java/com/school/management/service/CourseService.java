@@ -19,7 +19,7 @@ public class CourseService {
 
     private final CourseRepository courseRepository;
 
-    public CourseService(StudentRepository studentRepository, CourseRepository courseRepository) {
+    public CourseService(CourseRepository courseRepository) {
         this.courseRepository = courseRepository;
     }
 
