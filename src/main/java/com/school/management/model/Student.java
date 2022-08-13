@@ -22,10 +22,11 @@ public class Student {
 	private String name;
 	private String address;
 
-	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+	@ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
 	@JoinTable(name = "course_student",
-			joinColumns = @JoinColumn(name = "course_id"),
-			inverseJoinColumns = @JoinColumn(name = "student_id"))
+			joinColumns = @JoinColumn(name = "student_id"),
+			inverseJoinColumns = @JoinColumn(name = "course_id"))
+	@OnDelete(action = OnDeleteAction.CASCADE)
 	private List<Course> courses = new ArrayList<>();
 
 
