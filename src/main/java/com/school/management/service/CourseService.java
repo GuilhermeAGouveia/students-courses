@@ -14,6 +14,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -33,9 +34,17 @@ public class CourseService {
     }
 
     public List<CourseDto> getCourses(Boolean withoutCourse){
-        return courseRepository.findAll().stream()
-                .map(course -> new CourseDto(course.getId(), course.getName(), course.getUpdatedAt(), course.getCreatedAt()))
+        List<CourseDto> courses = courseRepository.findAll()
+                .stream().map(course -> {
+                    if (withoutCourse && !course.getStudents().isEmpty())
+                        return null;
+                    return new CourseDto(course.getId(), course.getName(), course.getStudents(), course.getCreatedAt(), course.getUpdatedAt());
+
+                })
                 .collect(Collectors.toList());
+
+        return courses.stream().filter(Objects::nonNull).collect(Collectors.toList());
+
     }
 
     public List<CourseDto> createCourses(List<CourseDto> coursesDto) {
@@ -70,7 +79,7 @@ public class CourseService {
     @Transactional
     public void deleteCourse(Long id, Boolean confirmDeletion) {
         if (confirmDeletion) {
-            Course c = courseRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Student not %d found"));
+            Course c = courseRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Course not found."));
             courseRepository.delete(c);
         } else {
             throw new ResponseStatusException(

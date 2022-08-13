@@ -32,7 +32,11 @@ public class Course {
     )
     private Timestamp updatedAt;
 
-    @ManyToMany(mappedBy = "courses", cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
+    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @JoinTable(name = "course_student",
+            joinColumns = @JoinColumn(name = "course_id"),
+            inverseJoinColumns = @JoinColumn(name = "student_id"))
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private List<Student> students = new ArrayList<>();
 
     public Course() {}
