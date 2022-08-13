@@ -14,7 +14,9 @@ import org.springframework.web.server.ResponseStatusException;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -52,7 +54,7 @@ public class StudentCourseService {
         Student student = studentRepository.findById(id).orElseThrow(() -> new ResponseStatusException(
                 HttpStatus.NOT_FOUND, "Student not found."));
 
-        List courses = new ArrayList<Course>();
+        Set courses = new HashSet<Course>();
         coursesId.stream().forEach(courseId -> {
             Course course = courseRepository.findById(courseId).orElseThrow(() -> new ResponseStatusException(
                     HttpStatus.NOT_FOUND, String.format("Course with id %d not found.", courseId))
@@ -96,7 +98,7 @@ public class StudentCourseService {
         Course course = courseRepository.findById(id).orElseThrow(() -> new ResponseStatusException(
                 HttpStatus.NOT_FOUND, "Course not found."));
 
-        List students = new ArrayList<Student>();
+        Set students = new HashSet<Student>();
         studentsId.stream().forEach(studentId -> {
             Student student = studentRepository.findById(studentId).orElseThrow(() -> new ResponseStatusException(
                     HttpStatus.NOT_FOUND, String.format("Student with id %d not found.", studentId))

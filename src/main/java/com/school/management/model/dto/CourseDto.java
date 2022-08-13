@@ -7,6 +7,7 @@ import lombok.Setter;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Setter
@@ -14,7 +15,7 @@ import java.util.stream.Collectors;
 public class CourseDto {
     private Long id;
     private String name;
-    private List<StudentDto> students;
+    private Set<StudentDto> students;
     private Timestamp updatedAt;
     private Timestamp createdAt;
 
@@ -35,12 +36,12 @@ public class CourseDto {
         this.createdAt = createAt;
     }
 
-    public CourseDto(Long id, String name, List<Student> students, Timestamp updatedAt, Timestamp createAt){
+    public CourseDto(Long id, String name, Set<Student> students, Timestamp updatedAt, Timestamp createAt){
         this(id, name, updatedAt, createAt);
 
         this.students = students.stream()
                 .map(student ->
                         new StudentDto(student.getId(), student.getName(), student.getAddress(), student.getUpdatedAt(), student.getCreatedAt()))
-                .collect(Collectors.toList());
+                .collect(Collectors.toSet());
     }
 }

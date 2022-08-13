@@ -11,7 +11,9 @@ import java.sql.Time;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -37,14 +39,14 @@ public class Course {
             joinColumns = @JoinColumn(name = "course_id"),
             inverseJoinColumns = @JoinColumn(name = "student_id"))
     @OnDelete(action = OnDeleteAction.CASCADE)
-    private List<Student> students = new ArrayList<>();
+    private Set<Student> students = new HashSet<>();
 
     public Course() {}
     public Course(Long id) {
         this.id = id;
     }
 
-    public Course(String name, List<Student> students, Timestamp updatedAt, Timestamp createdAt) {
+    public Course(String name, Set<Student> students, Timestamp updatedAt, Timestamp createdAt) {
         this.name = name;
         this.students = students;
         this.updatedAt = updatedAt;
@@ -60,7 +62,7 @@ public class Course {
         this(name, null, updatedAt, createdAt);
         this.id = id;
     }
-    public Course(Long id, String name, List<Student> students, Timestamp updatedAt, Timestamp createdAt){
+    public Course(Long id, String name, Set<Student> students, Timestamp updatedAt, Timestamp createdAt){
         this(name, students, updatedAt, createdAt);
         this.id = id;
     }

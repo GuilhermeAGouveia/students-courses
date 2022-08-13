@@ -9,6 +9,7 @@ import org.hibernate.annotations.OnDeleteAction;
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -27,7 +28,7 @@ public class Student {
 			joinColumns = @JoinColumn(name = "student_id"),
 			inverseJoinColumns = @JoinColumn(name = "course_id"))
 	@OnDelete(action = OnDeleteAction.CASCADE)
-	private List<Course> courses = new ArrayList<>();
+	private Set<Course> courses = new HashSet<>();
 
 
 	private Timestamp createdAt;
@@ -41,7 +42,7 @@ public class Student {
 		this.id = id;
 	}
 
-	public Student(String name, String address, List <Course> courses, Timestamp createdAt, Timestamp updatedAt) {
+	public Student(String name, String address, Set <Course> courses, Timestamp createdAt, Timestamp updatedAt) {
 		this.name = name;
 		this.address = address;
 		this.createdAt = createdAt;
@@ -56,7 +57,7 @@ public class Student {
 		this.updatedAt = updatedAt;
 	}
 
-	public Student(Long id, String name, String address, List <Course> courses, Timestamp createdAt, Timestamp updatedAt) {
+	public Student(Long id, String name, String address, Set <Course> courses, Timestamp createdAt, Timestamp updatedAt) {
 		this(name, address, courses, createdAt, updatedAt);
 		this.id = id;
 	}
