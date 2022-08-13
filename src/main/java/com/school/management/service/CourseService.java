@@ -38,7 +38,7 @@ public class CourseService {
                 .stream().map(course -> {
                     if (withoutCourse && !course.getStudents().isEmpty())
                         return null;
-                    return new CourseDto(course.getId(), course.getName(), course.getStudents(), course.getCreatedAt(), course.getUpdatedAt());
+                    return new CourseDto(course.getId(), course.getName(), course.getCreatedAt(), course.getUpdatedAt());
 
                 })
                 .collect(Collectors.toList());
