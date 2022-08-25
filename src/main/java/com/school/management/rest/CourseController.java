@@ -69,7 +69,7 @@ public class CourseController {
 	 * @return list of students enrolled in the course.
 	 */
 	@GetMapping(value = "/{id}/students")
-	@ResponseStatus(HttpStatus.NOT_FOUND)
+	@ResponseStatus(HttpStatus.OK)
 	public List<StudentDto> getStudentsFromCourse(@PathVariable Long id) {
 		return studentCourseService.getStudentsFromCourse(id);
 	}
@@ -78,7 +78,7 @@ public class CourseController {
 	 * @return list of relationships between students and courses, ordered by course and student.
 	 */
 	@GetMapping(value = "/students")
-	@ResponseStatus(HttpStatus.NOT_FOUND)
+	@ResponseStatus(HttpStatus.OK)
 	public List<CourseDto> getRelations() {
 		return studentCourseService.getCoursesStudents();
 	}
@@ -96,7 +96,7 @@ public class CourseController {
 	 * @return the course's info updated.
 	 */
 	@PutMapping(value = "/{id}")
-	@ResponseStatus(HttpStatus.NOT_FOUND)
+	@ResponseStatus(HttpStatus.OK)
 	public CourseDto updateCourse(@PathVariable Long id, @RequestBody CourseDto courseDto) {
 		courseDto.setId(id);
 		return courseService.updateCourse(courseDto);
@@ -114,7 +114,7 @@ public class CourseController {
 	 * @return a list containing the course id and the enrolled students.
 	 */
 	@PutMapping(value = "/{id}/students")
-	@ResponseStatus(HttpStatus.NOT_FOUND)
+	@ResponseStatus(HttpStatus.OK)
 	public CourseDto updateCourseStudents(@PathVariable Long id, @RequestBody List<Long> studentIds) {
 		return studentCourseService.insertStudentInCourse(id, studentIds);
 	}

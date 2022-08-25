@@ -113,7 +113,7 @@ public class StudentService {
 			studentRepository.deleteById(id);
 		} else {
 			throw new ResponseStatusException(
-				HttpStatus.NOT_FOUND,
+				HttpStatus.BAD_REQUEST,
 				"To delete the student and student-courses relationships, inform confirm-deletion=true as a query param.");
 		}
 	}
